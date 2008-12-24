@@ -1,24 +1,20 @@
 #!/usr/bin/ruby
 #-*-mode:ruby-*-
-# Time-stamp: <2006-07-30 19:30:17 (djcb)>
+# Time-stamp: <2008-12-24 16:32:09 (djcb)> 
 
 # spuug: program to generate Gtk+ and GObject boilerplate in C
 #
-# Copyright (C) 2006 Dirk-Jan C. Binnema <djcb@djcbsoftware.nl>
+# Copyright (C) 2006,2007,2008 Dirk-Jan C. Binnema <djcb@djcbsoftware.nl>
 #
 # spuug is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
+# the Free Software Foundation; either version 3 of the License, or
 # (at your option) any later version.
 
 # spuug is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-
-# You should have received a copy of the GNU General Public License
-# along with Gnome-Art; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 require 'getoptlong'
 
@@ -68,7 +64,7 @@ class GNamer
       if (parts.length == 1)
         "TYPE_" + parts[0].upcase
       else
-        parts = parts.slice(0) + "_TYPE_" + parts.slice(1,parts.length-1).to_s
+        parts = parts.slice(0) + "Type" + parts.slice(1,parts.length-1).to_s
         underscorify(parts).upcase
       end
     end
@@ -77,7 +73,7 @@ class GNamer
   def parent_include
     if @parent_classname =~ /^(Gtk)/
       "<gtk/gtk.h>"
-    elsif @parent_classname =~ /^(GObject)/
+    elsif @parent_classname =~ /^(GObject|GTypeInterface)/
       "<glib-object.h>"
     elsif @parent_classname =~ /^(Gnome)/
       "<libgnome/#{underscorify(@parent_classname).downcase.gsub(/_/,'-')}.h>"
@@ -166,17 +162,9 @@ class GObjectBuilder
                   "(G_TYPE_CHECK_INSTANCE_CAST((obj)," + 
                   @type_macro + "," + @gnamer.classname + "))", 
                   @longest) + "\n" +
-      hash_define("#{@class_cast_macro}(vtable)",
-                  "(G_TYPE_CHECK_CLASS_CAST((vtable)," + 
-                  @type_macro + "," + @gnamer.parent_classname + "))",
-                  @longest) + "\n" +
       hash_define("#{@is_macro}(obj)",
                   "(G_TYPE_CHECK_INSTANCE_TYPE((obj)," +
                   @type_macro + "))",
-                  @longest) + "\n" +
-      hash_define("#{@class_is_macro}(vtable)",
-                  "(G_TYPE_CHECK_CLASS_TYPE((vtable)," +
-                  @type_macro  + "))",
                   @longest) + "\n" +
       hash_define("#{@class_get_macro}(inst)", 
                   "(G_TYPE_INSTANCE_GET_INTERFACE((inst)," +
@@ -189,7 +177,7 @@ class GObjectBuilder
       # parent class
       "struct _#{@gnamer.classname}Class {\n" +
       "\t#{@gnamer.parent_classname} parent;\n\n" +
-      "\t" + commentnl("the 'vtable': declare function pointers here, eg.:") +
+      "\t" + commentnl("the 'vtable': declare function pointers here, e.g.:") +
       "\t" + commentnl("gchar* (*do_something_func) (" + 
                        @gnamer.classname + "* self, gint some_value);") +
       "};\n\n" +
@@ -197,7 +185,7 @@ class GObjectBuilder
       # main functions
       "GType        #{@gnamer.us_classname}_get_type    (void) G_GNUC_CONST;\n\n" +
 
-      commentnl("declare interface functions, corresponding to vtable above, eg.:") +
+      commentnl("declare interface functions, corresponding to vtable above, e.g.:") +
       commentnl("\tgchar*       " + @gnamer.us_classname + 
                 "_do_something (#{@gnamer.classname} *self, gint some_value);") + "\n\n" + 
     
@@ -218,7 +206,7 @@ class GObjectBuilder
       
       "static void #{@gnamer.us_classname}_base_init (gpointer g_class);\n\n" + 
 
-      commentnl("'implement' our interface functions, eg.:") +
+      commentnl("'implement' our interface functions, e.g.:") +
       "/*\n" + 
       "gchar*\n" + 
       "#{@gnamer.us_classname}_do_something (#{@gnamer.classname} *self, gint some_value)\n" +
@@ -245,7 +233,7 @@ class GObjectBuilder
       "\t\t\tNULL,\t\t/* class finalize */\n" +
       "\t\t\tNULL,\t\t/* class data */\n" +
       "\t\t\t0,\n" +
-      "\t\t\t0,\t\t/* n_preallocs */\n" +
+      "\t\t\t0,\t\t/* n_preallocs, ignored since 2.10 */\n" +
       "\t\t\tNULL,\t\t/* instance init */\n" +
     "\t\t};\n" +
       "\t\tmy_type = g_type_register_static (#{@gnamer.parent_type_macro},\n" +
@@ -277,7 +265,7 @@ class GObjectBuilder
                   @longest) + "\n" +
       hash_define("#{@class_cast_macro}(klass)",
                   "(G_TYPE_CHECK_CLASS_CAST((klass)," + 
-                  @type_macro + "," + @gnamer.parent_classname + "))",
+                  @type_macro + "," + @gnamer.classname + "Class))",
                   @longest) + "\n" +
       hash_define("#{@is_macro}(obj)",
                   "(G_TYPE_CHECK_INSTANCE_TYPE((obj)," +
@@ -304,14 +292,14 @@ class GObjectBuilder
       # parent class
       "struct _#{@gnamer.classname}Class {\n" +
       "\t#{@gnamer.parent_classname}Class parent_class;\n" +
-      "\t" + commentnl("insert signal callback declarations, eg.") +
+      "\t" + commentnl("insert signal callback declarations, e.g.") +
       "\t" + commentnl("void (* my_event) (" + @gnamer.classname + "* obj);") +
       "};\n\n" +
       
       # main functions
       commentnl("member functions") +
       "GType        #{@gnamer.us_classname}_get_type    (void) G_GNUC_CONST;\n\n" +
-      commentnl("typical parameter-less _new function") +
+      commentnl("parameter-less _new function (constructor)") +
 
       commentnl("if this is a kind of GtkWidget, it should probably return at GtkWidget*") +
       if (@gnamer.namespace =~ /Gtk|Gnome|Egg|Hildon/ or 
@@ -319,7 +307,7 @@ class GObjectBuilder
         then "GtkWidget*   " else   "#{@gnamer.classname}*    " end +
 
       @gnamer.us_classname + "_new         (void);\n\n"+
-      commentnl("fill in other public functions, eg.:") +
+      commentnl("fill in other public functions, e.g.:") +
       commentnl("\tvoid       " + @gnamer.us_classname + 
                 "_do_something (#{@gnamer.classname} *self, const gchar* param);") +
       commentnl("\tgboolean   " + @gnamer.us_classname + 
@@ -349,7 +337,7 @@ class GObjectBuilder
       commentnl("'private'/'protected' functions") +
       "static void #{@gnamer.us_classname}_class_init (#{@gnamer.classname}Class *klass);\n" +
       "static void #{@gnamer.us_classname}_init       (#{@gnamer.classname} *obj);\n" +
-      "static void #{@gnamer.us_classname}_finalize   (GObject *obj);\n" + 
+      "static void #{@gnamer.us_classname}_finalize   (GObject *obj);\n\n" + 
       
       commentnl("list my signals ") +
       "enum {\n" +
@@ -359,8 +347,8 @@ class GObjectBuilder
       
       "typedef struct _#{private_struct} #{private_struct};\n" +
       "struct _#{private_struct} {\n" +
-      "\t" + commentnl("my private members go here, eg.") +
-      "\t" + commentnl("gboolean frobnicate_mode;") +
+      "\t" + commentnl("my private members go here, e.g.") +
+      "\t" + commentnl("gboolean _frobnicate_mode;") +
       "};\n" +
       align2(get_private_func_def, "(G_TYPE_INSTANCE_GET_PRIVATE((o), \\",
              get_private_func_def.length + 4) + "\n" +
@@ -384,7 +372,7 @@ class GObjectBuilder
       "\t\t\tNULL,\t\t/* class finalize */\n" +
       "\t\t\tNULL,\t\t/* class data */\n" +
       "\t\t\tsizeof(#{@gnamer.classname}),\n" +
-      "\t\t\t1,\t\t/* n_preallocs */\n" +
+      "\t\t\t0,\t\t/* n_preallocs, ignored since 2.10 */\n" +
       "\t\t\t(GInstanceInitFunc) #{@gnamer.us_classname}_init,\n" +
       "\t\t\tNULL\n" +
       "\t\t};\n" +
@@ -412,8 +400,8 @@ class GObjectBuilder
       "{\n" +
       commentnl("uncomment the following if you init any of the private data") + 
       commentnl("\t#{private_struct} *priv = #{get_private_func}(obj);") + "\n" +
-      commentnl("\tinitialize this object, eg.:") +
-      commentnl("\tpriv->frobnicate_mode = FALSE;") +
+      commentnl("\tinitialize this object, e.g.:") +
+      commentnl("\tpriv->_frobnicate_mode = FALSE;") +
       "}\n\n" +
       
       "static void\n#{@gnamer.us_classname}_finalize (GObject *obj)\n" +
@@ -434,7 +422,7 @@ class GObjectBuilder
       then "GTK_WIDGET" else "#{@cast_macro}" end +
       "(g_object_new(#{@type_macro}, NULL));\n" +
       "}\n\n" +
-      commentnl("insert many other interesting function implementations") +
+      commentnl("following: other function implementations") +
       commentnl("such as #{@gnamer.us_classname}_do_something, or " +
                 "#{@gnamer.us_classname}_has_foo") + "\n"
   end
@@ -463,7 +451,7 @@ def build_test_obj_dot_c
     elsif @gnamer.parent_classname =~ /^(GObject)/
       "\tg_type_init ();\n"
     else
-      commentnl("\tput init code here, eg.") +
+      commentnl("\tput init code here, e.g.") +
         commentnl("\tgtk_init for gtk-derived, or g_type for gobject-derived")
     end +
     
@@ -530,9 +518,9 @@ end
 # main
 #
 def usage
-  $stderr.print "spuug version 0.2\n" +
-    "Copyright (c) 2006 Dirk-Jan C. Binnema <djcb@djcbsoftware.nl>.\n" +
-    "spuug is free software covered by the GNU General Public License v2.1\n\n" +
+  $stderr.print "spuug version 0.3\n" +
+    "Copyright (c) 2006,2007,2008 Dirk-Jan C. Binnema <djcb@djcbsoftware.nl>.\n" +
+    "spuug is free software covered by the GNU General Public License v3\n\n" +
     "spuug is a script to generate GObject boilerplate code\n" +
     "usage: spuug [OPTIONS]\n" +
     "where options are:\n" +
