@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>spuug</title>
+</head>
+<body>
+<h1><em>spuug</em> - a tool to generate GObjects</h1>
+
+<tt>spuug</tt> is a little tool that generates the boilerplate code for <a
+href="http://en.wikipedia.org/wiki/Gobject" >GObject</a>s. I you don't know
+what they are, then probably this tool is of little use to you...
+
+<p><tt>spuug</tt> can be used for 'plain' GObjects, but also for GTK+-widgets
+etc., and tries to be a bit smart with the code in spits out. I've been using
+it myself for a while, and it has been very helpful. However, a code generator
+is no more than that -- you still need to understand GObjects/GtkWidgets to
+use it. So, I would recommend writing a couple 'by hand' before using a tool
+like this one.
+
+<p>If you find any problems or you have improvements, please report them to
+me·
+
+<p><em>spuug</em> is Dutch for the imperative form of <em>to spit out</em>
+
+<h2>usage</h2>
+<pre>
+$ spuug --help
+spuug version 0.2
+Copyright (c) 2006 Dirk-Jan C. Binnema <djcb@djcbsoftware.nl>.
+spuug is free software covered by the GNU General Public License v2.1
+
+spuug is a script to generate GObject boilerplate code
+usage: spuug [OPTIONS]
+where options are:
+<table>
+<tr><td>   --class=<classname>,-c          <td>: the classname (e.g. MyFooBar)
+<tr><td>   --interface=<interface>,-i      <td>: the interface name (e.g. MyFooBarIFace)
+<tr><td>   --parent=<parent-classname>,-p  <td>: the parent classname (e.g. Bar)
+<tr><td>   --namespace=<namespace>,-n      <td>: the namespace (e.g. My)
+<tr><td>   --test,-t                       <td>: generate test code as well
+<tr><td>   --force,-f                      <td>: overwrite existing files
+<tr><td>   --help,-h                       <td>: show this help text
+</table>
+Example:
+        $ spuug --class=FunkyFooBar --namespace=Funky --parent=GtkWidget
+will generate funky-foobar.c and funky-foobar.h with the boilerplate code
+
+and
+        $ spuug --class=CuteThing --namespace=Cute --parent=GObject --test
+will generate cute-thing.c and cute-thing.h with the boilerplate code,
+and test-cute-thing.c and Makefile for testing
+</pre>
+
+<h2>requirements</h2>
+
+<tt>spuug</tt> is written in <a
+href="http://en.wikipedia.org/wiki/Ruby_programming_language" >ruby</a>, and
+you'll need that if you want to use it.
+
+<h2>license</h2>
+
+<tt>spuug</tt> is available under the terms of the <a
+href="http://en.wikipedia.org/wiki/GPL" >GNU General Public
+License</a>. However, that license does not apply to the generated code. The
+generated code is your own, and you are free to do whatever you want with it,
+including using it for proprietary code.
+
+<h2>author</h2>
+
+<tt>spuug</tt> was written by me, Dirk-Jan C. Binnema. You can reach me at
+<tt>djcb at djcbsoftware dot nl</tt>, or alternatively through IM (XMPP) at
+<tt>djcb@jabber.org</tt>. If you can read Dutch, maybe my <a
+href="http://www.djcbsoftware.nl/ChangeLog" >blog</a> is interesting.
+
+<h2>download</h2>
+<tt>spuug 0.2</tt> (August 2006) can be downloaded
+<a href="http://www.djcbsoftware.nl/code/spuug/spuug" >here</a>.
+
+<hr>
+<address></address>
+</body> </html>
