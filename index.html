@@ -8,8 +8,8 @@
 <h1><em>spuug</em> - a tool to generate GObjects</h1>
 
 <tt>spuug</tt> is a little tool that generates the boilerplate code for <a
-href="http://en.wikipedia.org/wiki/Gobject" >GObject</a>s. I you don't know
-what they are, then probably this tool is of little use to you...
+href="http://en.wikipedia.org/wiki/Gobject" >GObject</a>s. If you don't know
+what they are, then probably this tool is not for you...
 
 <p><tt>spuug</tt> can be used for 'plain' GObjects, but also for GTK+-widgets
 etc., and tries to be a bit smart with the code in spits out. I've been using
@@ -21,36 +21,34 @@ like this one.
 <p>If you find any problems or you have improvements, please report them to
 me·
 
-<p><em>spuug</em> is Dutch for the imperative form of <em>to spit out</em>
+<p><strong>Update:</strong> 24.12.2008: a new version 0.3 is available, mostly
+due to a patch from Viktor Nagy -- thanks!
+
 
 <h2>usage</h2>
-<pre>
-$ spuug --help
-spuug version 0.2
-Copyright (c) 2006 Dirk-Jan C. Binnema <djcb@djcbsoftware.nl>.
-spuug is free software covered by the GNU General Public License v2.1
+<pre>$ spuug --help
+Copyright (c) 2006,2007,2008 Dirk-Jan C. Binnema <djcb@djcbsoftware.nl>.
+spuug is free software covered by the GNU General Public License v3
 
 spuug is a script to generate GObject boilerplate code
 usage: spuug [OPTIONS]
 where options are:
-<table>
-<tr><td>   --class=<classname>,-c          <td>: the classname (e.g. MyFooBar)
-<tr><td>   --interface=<interface>,-i      <td>: the interface name (e.g. MyFooBarIFace)
-<tr><td>   --parent=<parent-classname>,-p  <td>: the parent classname (e.g. Bar)
-<tr><td>   --namespace=<namespace>,-n      <td>: the namespace (e.g. My)
-<tr><td>   --test,-t                       <td>: generate test code as well
-<tr><td>   --force,-f                      <td>: overwrite existing files
-<tr><td>   --help,-h                       <td>: show this help text
-</table>
+	--class=<classname>,-c         : the classname (e.g. MyFooBar)
+	--interface=<interface>,-i     : the interface name (e.g. MyFooBarIFace)
+	--parent=<parent-classname>,-p : the parent classname (e.g. Bar)
+	--namespace=<namespace>,-n     : the namespace (e.g. My)
+	--test,-t                      : generate test code as well
+	--force,-f                     : overwrite existing files
+	--help,-h                      : show this help text
+
 Example:
-        $ spuug --class=FunkyFooBar --namespace=Funky --parent=GtkWidget
+	$ spuug --class=FunkyFooBar --namespace=Funky --parent=GtkWidget
 will generate funky-foobar.c and funky-foobar.h with the boilerplate code
 
 and
-        $ spuug --class=CuteThing --namespace=Cute --parent=GObject --test
+	$ spuug --class=CuteThing --namespace=Cute --parent=GObject --test
 will generate cute-thing.c and cute-thing.h with the boilerplate code,
-and test-cute-thing.c and Makefile for testing
-</pre>
+and test-cute-thing.c and Makefile for testing</pre>
 
 <h2>requirements</h2>
 
@@ -61,22 +59,28 @@ you'll need that if you want to use it.
 <h2>license</h2>
 
 <tt>spuug</tt> is available under the terms of the <a
-href="http://en.wikipedia.org/wiki/GPL" >GNU General Public
-License</a>. However, that license does not apply to the generated code. The
-generated code is your own, and you are free to do whatever you want with it,
-including using it for proprietary code.
+href="http://en.wikipedia.org/wiki/GPL" >GNU General Public License</a>
+version 3. However, that license does <strong>not</strong> apply to the
+generated code. The generated code is your own, and you are free to do
+whatever you want with it, including using it for proprietary code.
 
 <h2>author</h2>
 
 <tt>spuug</tt> was written by me, Dirk-Jan C. Binnema. You can reach me at
 <tt>djcb at djcbsoftware dot nl</tt>, or alternatively through IM (XMPP) at
-<tt>djcb@jabber.org</tt>. If you can read Dutch, maybe my <a
-href="http://www.djcbsoftware.nl/ChangeLog" >blog</a> is interesting.
+<tt>djcb@jabber.org</tt>. I maintain some blogs; my Dutch <a
+href="http://www.djcbsoftware.nl/ChangeLog" >ChangeLog</a>-blog, my English <a href="http://djcbflux.blogspot.com" >djcbflux</a> (mostly technical) and <a href="http://djcbflux.blogspot.com" >Emacs-Fu</a> with Emacs-tips.
 
 <h2>download</h2>
-<tt>spuug 0.2</tt> (August 2006) can be downloaded
-<a href="http://www.djcbsoftware.nl/code/spuug/spuug" >here</a>.
-
+<tt>spuug 0.3</tt> (December 2008) can be downloaded
+<a href="http://www.djcbsoftware.nl/code/spuug/spuug" >here</a>; there is also a <a href="http://gitorious.org/projects/spuug/" >git-repository</a> available.
 <hr>
-<address></address>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-578531-1");
+pageTracker._trackPageview();
+</script>
 </body> </html>
