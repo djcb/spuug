@@ -21,14 +21,20 @@ like this one.
 <p>If you find any problems or you have improvements, please report them to
 me·
 
-<p><strong>Update:</strong> 24.12.2008: a new version 0.3 is available, mostly
+<p><strong>Update:</strong> 2010-11-13: version 0.4 is now available, which
+  simplifies the output a bit (use <tt>G_DEFINE_TYPE</tt>) and make thing
+  faster in some cases (by putting at 'priv'-pointer in the public
+  struct).
+ 
+<p><strong>Update:</strong> 2008-12-24: a new version 0.3 is available, mostly
 due to a patch from Viktor Nagy -- thanks!
 
 
 <h2>usage</h2>
 <pre>$ spuug --help
-Copyright (c) 2006,2007,2008 Dirk-Jan C. Binnema <djcb@djcbsoftware.nl>.
-spuug is free software covered by the GNU General Public License v3
+spuug version 0.4
+Copyright (c) 2006-2010 Dirk-Jan C. Binnema <djcb@djcbsoftware.nl>.
+spuug is free software covered by the GNU GPL v3+
 
 spuug is a script to generate GObject boilerplate code
 usage: spuug [OPTIONS]
@@ -43,12 +49,12 @@ where options are:
 
 Example:
 	$ spuug --class=FunkyFooBar --namespace=Funky --parent=GtkWidget
-will generate <a href="funky-foo-bar.c" >funky-foo-bar.c</a> and <a href="funky-foo-bar.h" >funky-foo-bar.h</a> with the boilerplate code
+will generate funky-foobar.c and funky-foobar.h with the boilerplate code
 
 and
 	$ spuug --class=CuteThing --namespace=Cute --parent=GObject --test
-will generate <a href="cute-thing.c" >cute-thing.c</a> and <a href="cute-thing.h" >cute-thing.h</a> with the boilerplate code,
-and <a href="test-cute-thing.c" >test-cute-thing.c</a> and <a href="Makefile" >Makefile</a> for testing</pre>
+will generate cute-thing.c and cute-thing.h with the boilerplate code,
+and test-cute-thing.c and Makefile for testing</pre>
 
 <h2>requirements</h2>
 
@@ -68,11 +74,12 @@ whatever you want with it, including using it for proprietary code.
 
 <tt>spuug</tt> was written by me, Dirk-Jan C. Binnema. You can reach me at
 <tt>djcb at djcbsoftware dot nl</tt>, or alternatively through IM (XMPP) at
-<tt>djcb@jabber.org</tt>. I maintain some blogs; my Dutch <a
-href="http://www.djcbsoftware.nl/ChangeLog" >ChangeLog</a>-blog, my English <a href="http://djcbflux.blogspot.com" >djcbflux</a> (mostly technical) and <a href="http://djcbflux.blogspot.com" >Emacs-Fu</a> with Emacs-tips.
+<tt>djcb@jabber.org</tt>. I maintain some blogs; my
+Dutch <a href="http://www.djcbsoftware.nl/ChangeLog" >ChangeLog</a>-blog
+and <a href="http://djcbflux.blogspot.com" >Emacs-Fu</a> with Emacs-tips.
 
 <h2>download</h2>
-<tt>spuug 0.3</tt> (December 2008) can be downloaded
+<tt>spuug 0.4</tt> (November 2010) can be downloaded
 <a href="http://www.djcbsoftware.nl/code/spuug/spuug" >here</a>; there is also a <a href="http://gitorious.org/projects/spuug/" >git-repository</a> available.
 <hr>
 <script type="text/javascript">
